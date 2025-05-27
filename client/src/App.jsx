@@ -1,31 +1,25 @@
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import JourneyWall from './JourneyWall';
 import './App.css';
+import NavBar from './navbar';
+import StudyPlan from './StudyPlan';
+import JobTracker from './JobTracker';
+import ContactUs from './ContactUs';
+import Home from './Home';
 
-function Home() {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate('/journey');
-  };
-
-  return (
-    <div className="app-container">
-      <h1>Forge</h1>
-      <p className="tagline">Built for the ones who are forging their path, not just following it.</p>
-      <button className="start-button" onClick={handleClick}>
-        Get Started
-      </button>
-    </div>
-  );
-}
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/journey" element={<JourneyWall />} />
-    </Routes>
+    <>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/journey-wall" element={<JourneyWall />} />
+        <Route path="/job-tracker" element={<JobTracker />} />
+        <Route path="/study-plan" element={<StudyPlan />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+      </Routes>
+    </>
   );
 }
 

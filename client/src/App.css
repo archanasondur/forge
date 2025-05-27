@@ -5,26 +5,47 @@
   justify-content: center;
   height: 100vh;
   width: 100vw;
-  background-color: #000;       /* dark background */
-  color: #fff;                  /* white text */
+  background: linear-gradient(135deg, #0a0a0a, #7c3aed); /* black to purple */
+  color: #f4f4f5;
   text-align: center;
   font-family: Arial, sans-serif;
-}
-
-.tagline {
-  font-size: 1.2rem;
-  color: #ccc;
-  max-width: 400px;
 }
 
 .start-button {
   padding: 12px 24px;
   font-size: 1rem;
-  background-color: #1f2937;
+  background-color: #8b5cf6;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   margin-top: 20px;
+  transition: background-color 0.3s;
 }
+
+.start-button:hover {
+  background-color: #7c3aed;
+}
+
+.blog-card {
+  /* background-color: #1a1a1a; */
+  padding: 20px;
+  border-radius: 8px;
+  text-align: left;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  background-color: rgba(26, 26, 26, 0.8); 
+  backdrop-filter: blur(2px); 
+
+}
+
+.blog-card h3 {
+  margin-bottom: 5px;
+  color: #f4f4f5;
+}
+
+.blog-card p {
+  margin: 4px 0;
+  color: #a1a1aa;
+}
+
 
