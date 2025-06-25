@@ -1,4 +1,6 @@
 import {useNavigate} from 'react-router-dom';
+import { useState } from 'react';
+
 
 function JourneyWall() {
     const navigate = useNavigate();
@@ -6,6 +8,8 @@ function JourneyWall() {
     const gohome = () => {
         navigate('/');
     }
+
+    const [selectedFilter, setSelectedFilter] = useState("All");
 
     const blogPosts = [
       {
@@ -31,13 +35,25 @@ function JourneyWall() {
       }
     ];    
 
+    const filteredPosts = selectedFilter === "All"
+      ? blogPosts
+      : blogPosts.filter((post) => post.category === selectedFilter);
+
+
     return (
       <div className="app-container">
-        <h1>JourneyWall</h1>
+        <h2>JourneyWall</h2>
         <p>This is where inspiring career stories will live.</p>
 
+        <div className="filter-buttons">
+          <button className={selectedFilter === "All" ? "active-filter" : ""} onClick={() => setSelectedFilter("All")}>All</button>
+          <button className={selectedFilter === "Journeys" ? "active-filter" : ""} onClick={() => setSelectedFilter("Journeys")}>Journeys</button>
+          <button className={selectedFilter === "Roadmaps" ? "active-filter" : ""} onClick={() => setSelectedFilter("Roadmaps")}>Roadmaps</button>
+          <button className={selectedFilter === "Tips" ? "active-filter" : ""} onClick={() => setSelectedFilter("Tips")}>Tips</button>
+        </div>
+
         <div className="blog-list">
-          {blogPosts.map((post) => (
+          {filteredPosts.map((post) => (
             <div key={post.id} className="blog-card">
               <h3><b>Blog - </b>{post.title}</h3>
               <p><strong>{post.category}</strong> · by {post.author}</p>

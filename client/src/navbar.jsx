@@ -4,6 +4,12 @@ import './navbar.css';
 function NavBar() {
     return(
         <nav className='navbar'>
+            <Link to="/" className="nav-logo">
+                {/* <img src="/fo-go.png" alt="Forge logo" className="logo-icon" /> */}
+                <img src="/forge-icon.png" alt="Forge logo" className="logo-icon" />
+            </Link>
+
+
             <Link to="/" className="nav-item">Home</Link>
             <Link to="/journey-wall" className="nav-item">Journey Wall</Link>
             <Link to="/job-tracker" className="nav-item">Job Tracker</Link>

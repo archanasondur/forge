@@ -1,9 +1,9 @@
 .navbar {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 40px;
     background-color: rgba(0, 0, 0, 0.9);
-    padding: 16px;
+    padding: 20px;
     position: fixed;
     width: 100%;
     top: 0;
@@ -19,5 +19,22 @@
   
   .nav-item:hover {
     color: #a78bfa; 
+  }
+  
+
+  /* ----- */
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    /* gap: 5px; */
+    font-weight: bold;
+    font-size: 20px;
+    color: #f4f4f5;
+    text-decoration: none;
+  }
+  
+  .logo-icon {
+    height: 30px;
+    width: 50px;
   }
   

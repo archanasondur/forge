@@ -1,0 +1,35 @@
+.job-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+  
+  .job-form input,
+  .job-form textarea {
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  .job-form button {
+    background-color: #7e57c2;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .job-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .job-card {
+    background-color: #1f1f1f;
+    padding: 12px;
+    border-left: 4px solid #7e57c2;
+    color: white;
+  }
+  
