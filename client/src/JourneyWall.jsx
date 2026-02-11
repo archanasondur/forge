@@ -17,7 +17,7 @@ function JourneyWall() {
         title: "From Rejections to Offers",
         category: "Journeys",
         author: "Aarav Sharma",
-        summary: "I got 12 rejections before I finally cracked an internship. Here’s what helped."
+        summary: "I got 12 rejections before I finally cracked an internship. Here's what helped."
       },
       {
         id: 2,
@@ -41,15 +41,15 @@ function JourneyWall() {
 
 
     return (
-      <div className="app-container">
+      <div className="journey-wall-container">
         <h2>JourneyWall</h2>
         <p>This is where inspiring career stories will live.</p>
 
         <div className="filter-buttons">
-          <button className={selectedFilter === "All" ? "active-filter" : ""} onClick={() => setSelectedFilter("All")}>All</button>
-          <button className={selectedFilter === "Journeys" ? "active-filter" : ""} onClick={() => setSelectedFilter("Journeys")}>Journeys</button>
-          <button className={selectedFilter === "Roadmaps" ? "active-filter" : ""} onClick={() => setSelectedFilter("Roadmaps")}>Roadmaps</button>
-          <button className={selectedFilter === "Tips" ? "active-filter" : ""} onClick={() => setSelectedFilter("Tips")}>Tips</button>
+          <button className={selectedFilter === "All" ? "active-filter" : "filter-button"} onClick={() => setSelectedFilter("All")}>All</button>
+          <button className={selectedFilter === "Journeys" ? "active-filter" : "filter-button"} onClick={() => setSelectedFilter("Journeys")}>Journeys</button>
+          <button className={selectedFilter === "Roadmaps" ? "active-filter" : "filter-button"} onClick={() => setSelectedFilter("Roadmaps")}>Roadmaps</button>
+          <button className={selectedFilter === "Tips" ? "active-filter" : "filter-button"} onClick={() => setSelectedFilter("Tips")}>Tips</button>
         </div>
 
         <div className="blog-list">

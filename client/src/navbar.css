@@ -1,40 +1,86 @@
 .navbar {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    background-color: rgba(0, 0, 0, 0.9);
-    padding: 20px;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 10;
-  }
-  
-  .nav-item {
-    color: #f4f4f5;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-  }
-  
-  .nav-item:hover {
-    color: #a78bfa; 
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  background: rgba(15, 12, 41, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
 
-  /* ----- */
+.nav-item {
+  color: #f4f4f5;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-item:hover {
+  color: #a78bfa;
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.nav-item:hover::after {
+  width: 80%;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.3rem;
+  background: linear-gradient(135deg, #a78bfa, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.nav-logo:hover {
+  transform: scale(1.05);
+}
+
+.logo-icon {
+  height: 30px;
+  width: 50px;
+  filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.3));
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    gap: 20px;
+    padding: 15px;
+  }
+
+  .nav-item {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+
   .nav-logo {
-    display: flex;
-    align-items: center;
-    /* gap: 5px; */
-    font-weight: bold;
-    font-size: 20px;
-    color: #f4f4f5;
-    text-decoration: none;
+    font-size: 1.1rem;
   }
-  
-  .logo-icon {
-    height: 30px;
-    width: 50px;
-  }
-  
+}

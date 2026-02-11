@@ -12,13 +12,15 @@ function App() {
   return (
     <>
       <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/journey-wall" element={<JourneyWall />} />
-        <Route path="/job-tracker" element={<JobTracker />} />
-        <Route path="/study-plan" element={<StudyPlan />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-      </Routes>
+      <main className="route-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/journey-wall" element={<JourneyWall />} />
+          <Route path="/job-tracker" element={<JobTracker />} />
+          <Route path="/study-plan" element={<StudyPlan />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+        </Routes>
+      </main>
     </>
   );
 }

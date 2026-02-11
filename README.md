@@ -32,9 +32,35 @@ Forge is a full-stack career companion that helps students and early-career devs
 ---
 
 ## How to Run Locally
+
+### Frontend (React)
 ```bash
 git clone https://github.com/yourusername/forge
 cd forge/client
 npm install
 npm run dev
->>>>>>> c97639a26aa2e23159262412364acfa7238010f5
+```
+Frontend will be available at: http://localhost:5173
+
+### Backend (Node.js + PostgreSQL)
+```bash
+cd forge/server
+npm install
+node index.js
+```
+Backend will be available at: http://localhost:3001
+
+### Database Setup
+1. Install PostgreSQL locally: `brew install postgresql@15`
+2. Start PostgreSQL service: `brew services start postgresql@15`
+3. Create database: `createdb forge_db`
+4. Run migrations: `cd server && node db/migrate.js`
+
+### Environment Variables
+Create `.env` file in server directory:
+```env
+DATABASE_URL=postgresql://username@localhost:5432/forge_db
+PORT=3001
+NODE_ENV=development
+FRONTEND_URL=http://localhost:5173
+```
