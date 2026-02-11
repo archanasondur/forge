@@ -24,46 +24,42 @@ body {
 .app-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
   width: 100%;
+  min-height: 100vh;
   background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
   color: #f4f4f5;
-  text-align: center;
 }
 
-/* Main content area - takes full width and height minus navbar */
+/* Main content area */
 main {
   width: 100% !important;
-  min-height: calc(100vh - 80px) !important;
-  margin-top: 80px !important;
+  min-height: 100vh !important;
   padding: 0 !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  margin: 0 !important;
   max-width: 100% !important;
 }
 
 /* Route content containers */
 .route-content {
-  width: 100% !important;
-  min-height: calc(100vh - 80px) !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  margin-top: 80px !important;
-  max-width: 100% !important;
+  flex: 1;
+  /* Take remaining space */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
 }
 
 /* Shared Premium Container Styles */
 .premium-container {
   width: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: 100vh;
   background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
   color: #f4f4f5;
-  padding: 100px 40px 40px 40px;
+  padding: 40px;
   box-sizing: border-box;
-  position: relative;
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .premium-container::before {
@@ -81,7 +77,7 @@ main {
 /* Home Container */
 .home-container {
   width: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -89,7 +85,7 @@ main {
   background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
   color: #f4f4f5;
   text-align: center;
-  padding: 100px 40px 40px 40px;
+  padding: 60px 40px;
   box-sizing: border-box;
   position: relative;
   animation: fadeIn 0.6s ease;

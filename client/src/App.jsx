@@ -10,7 +10,7 @@ import Home from './Home';
 
 function App() {
   return (
-    <>
+    <div className="app-container">
       <NavBar />
       <main className="route-content">
         <Routes>
@@ -21,7 +21,7 @@ function App() {
           <Route path="/contact-us" element={<ContactUs />} />
         </Routes>
       </main>
-    </>
+    </div>
   );
 }
 

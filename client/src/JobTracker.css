@@ -2,13 +2,11 @@
 .job-tracker {
   width: 100%;
   max-width: 100%;
-  padding: 150px 20px 20px 20px;
-  /* Increased top padding for complete navbar clearance */
+  padding: 60px 40px;
   background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-  min-height: calc(100vh - 80px);
+  min-height: 100vh;
   color: #f4f4f5;
   box-sizing: border-box;
-  margin: 0;
   position: relative;
   overflow-x: hidden;
 }
@@ -29,18 +27,55 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 50px; /* Additional margin to clear navbar */
-  margin-bottom: 30px;
-  padding: 25px 30px;
+  margin-bottom: 50px;
+  padding: 30px 40px;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(139, 92, 246, 0.5); /* Temporary border for visibility debug */
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
   width: 100%;
   box-sizing: border-box;
   position: relative;
-  z-index: 10;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.view-toggle {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toggle-btn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+  background: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-btn:hover:not(.active) {
+  color: #f4f4f5;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .job-tracker-header h2 {

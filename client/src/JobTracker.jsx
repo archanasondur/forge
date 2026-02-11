@@ -1,6 +1,8 @@
 // JobTracker.jsx
 import React, { useState, useEffect, useMemo } from "react";
 import JobModal from "./components/JobModal";
+import KanbanView from "./KanbanView";
+import { LayoutGrid, Table as TableIcon } from "lucide-react";
 import "./JobTracker.css";
 
 function JobTracker() {
@@ -9,6 +11,7 @@ function JobTracker() {
   const [showModal, setShowModal] = useState(false);
   const [jobToEdit, setJobToEdit] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [view, setView] = useState("table"); // 'table' or 'kanban'
 
   // Load jobs when component mounts
   useEffect(() => {
@@ -22,7 +25,12 @@ function JobTracker() {
       const response = await fetch("http://localhost:3001/api/jobs");
       if (response.ok) {
         const data = await response.json();
-        setJobs(data);
+        // Ensure ids are strings for dnd-kit
+        const formattedData = data.map(job => ({
+          ...job,
+          id: job.id.toString()
+        }));
+        setJobs(formattedData);
       } else {
         console.error("Failed to fetch jobs");
       }
@@ -30,6 +38,46 @@ function JobTracker() {
       console.error("Error fetching jobs:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (jobId, newStatus) => {
+    // Optimistic update
+    const previousJobs = [...jobs];
+    const updatedJobs = jobs.map(job =>
+      job.id === jobId ? { ...job, status: newStatus } : job
+    );
+    setJobs(updatedJobs);
+
+    try {
+      const jobToUpdate = updatedJobs.find(j => j.id === jobId);
+      const response = await fetch(`http://localhost:3001/api/jobs/${jobId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          // Send all fields to match the current PUT implementation
+          company: jobToUpdate.company,
+          role: jobToUpdate.role,
+          status: newStatus,
+          notes: jobToUpdate.notes,
+          applied_at: jobToUpdate.applied_at,
+          deadline: jobToUpdate.deadline,
+          location: jobToUpdate.location,
+          salary_range: jobToUpdate.salary_range,
+          job_url: jobToUpdate.job_url,
+          resume_url: jobToUpdate.resume_url
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update status on server");
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      // Rollback on error
+      setJobs(previousJobs);
     }
   };
 
@@ -193,7 +241,25 @@ function JobTracker() {
   return (
     <div className="job-tracker">
       <div className="job-tracker-header">
-        <h2>Job Tracker</h2>
+        <div className="header-left">
+          <h2>Job Tracker</h2>
+          <div className="view-toggle">
+            <button
+              className={`toggle-btn ${view === 'table' ? 'active' : ''}`}
+              onClick={() => setView('table')}
+              title="Table View"
+            >
+              <TableIcon size={18} />
+            </button>
+            <button
+              className={`toggle-btn ${view === 'kanban' ? 'active' : ''}`}
+              onClick={() => setView('kanban')}
+              title="Board View"
+            >
+              <LayoutGrid size={18} />
+            </button>
+          </div>
+        </div>
         <button className="add-job-button" onClick={openAddModal}>
           + Add Job
         </button>
@@ -297,55 +363,62 @@ function JobTracker() {
           </button>
         </div>
       ) : (
-        <div className="jobs-table-container">
-          <table className="jobs-table">
-            <thead>
-              <tr>
-                <th>Company</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Date Applied</th>
-                <th>Pay</th>
-                <th>Notes</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {jobs.map((job) => (
-                <tr key={job.id}>
-                  <td className="company-cell">{job.company}</td>
-                  <td className="role-cell">{job.role}</td>
-                  <td>
-                    <span className={`status-badge ${getStatusColor(job.status)}`}>
-                      {job.status}
-                    </span>
-                  </td>
-                  <td>{formatDate(job.applied_at)}</td>
-                  <td>{job.salary_range || "N/A"}</td>
-                  <td className="notes-cell">
-                    {job.notes ? (
-                      <span title={job.notes}>
-                        {job.notes.length > 50
-                          ? job.notes.substring(0, 50) + "..."
-                          : job.notes
-                        }
-                      </span>
-                    ) : (
-                      "No notes"
-                    )}
-                  </td>
-                  <td>
-                    <button
-                      className="edit-button"
-                      onClick={() => openEditModal(job)}
-                    >
-                      Edit
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        // Conditional View Rendering
+        <div className="view-container">
+          {view === 'table' ? (
+            <div className="jobs-table-container">
+              <table className="jobs-table">
+                <thead>
+                  <tr>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Date Applied</th>
+                    <th>Pay</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {jobs.map((job) => (
+                    <tr key={job.id}>
+                      <td className="company-cell">{job.company}</td>
+                      <td className="role-cell">{job.role}</td>
+                      <td>
+                        <span className={`status-badge status-${(job.status || "default").toLowerCase().replace(" ", "-")}`}>
+                          {job.status}
+                        </span>
+                      </td>
+                      <td>{job.applied_at ? new Date(job.applied_at).toLocaleDateString() : "N/A"}</td>
+                      <td>{job.salary_range || "N/A"}</td>
+                      <td className="notes-cell">
+                        {job.notes ? (
+                          <span title={job.notes}>
+                            {job.notes.length > 50
+                              ? job.notes.substring(0, 50) + "..."
+                              : job.notes
+                            }
+                          </span>
+                        ) : (
+                          "No notes"
+                        )}
+                      </td>
+                      <td>
+                        <button
+                          className="edit-button"
+                          onClick={() => openEditModal(job)}
+                        >
+                          Edit
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <KanbanView jobs={jobs} onStatusChange={handleStatusChange} />
+          )}
         </div>
       )}
 
