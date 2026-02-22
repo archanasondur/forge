@@ -1,0 +1,461 @@
+/* ───────────────────────────────────────────
+   Interview Lab — Page Layout
+   ─────────────────────────────────────────── */
+
+.interview-lab-container {
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #f4f4f5;
+    padding: 100px 40px 60px;
+    box-sizing: border-box;
+    position: relative;
+    animation: labFadeIn 0.5s ease;
+}
+
+.interview-lab-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+@keyframes labFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.lab-header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.lab-header h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 0 0 12px;
+    background: linear-gradient(135deg, #a78bfa, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.lab-header p {
+    font-size: 1.15rem;
+    color: #d1d5db;
+    margin: 0;
+}
+
+.lab-content {
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+    z-index: 1;
+}
+
+.fade-in {
+    animation: panelFadeIn 0.35s ease;
+}
+
+@keyframes panelFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ───────────────────────────────────────────
+   Study Panel Header Actions
+   ─────────────────────────────────────────── */
+
+.study-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.progress-bar-wrapper {
+    flex: 1;
+    min-width: 250px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #e0e0e5;
+    margin-bottom: 8px;
+}
+
+.progress-track {
+    height: 8px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, #8b5cf6, #ec4899);
+    transition: width 0.4s ease;
+}
+
+/* Toggle Switch Styles */
+.mode-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.6rem 1.25rem;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mode-toggle span {
+    font-size: 0.95rem;
+    color: #a1a1aa;
+    transition: color 0.2s;
+}
+
+.mode-toggle span.active {
+    color: #c4b5fd;
+    font-weight: 600;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #4a4a4a;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #8b5cf6;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #8b5cf6;
+}
+
+input:checked+.slider:before {
+    transform: translateX(20px);
+}
+
+/* ───────────────────────────────────────────
+   Section Styles
+   ─────────────────────────────────────────── */
+
+.study-section {
+    margin-bottom: 36px;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #f4f4f5;
+    margin: 0 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ───────────────────────────────────────────
+   Rapid Revision Checklist
+   ─────────────────────────────────────────── */
+
+.sprint-heading {
+    text-align: center;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    animation: panelFadeIn 0.3s ease;
+}
+
+.sprint-heading h3 {
+    margin: 0 0 6px;
+    font-size: 1.2rem;
+    color: #c4b5fd;
+}
+
+.sprint-heading p {
+    margin: 0;
+    color: #d1d5db;
+    font-size: 0.95rem;
+}
+
+.checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 12px;
+}
+
+.checklist-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.checklist-item:hover {
+    background: rgba(139, 92, 246, 0.08);
+    border-color: rgba(139, 92, 246, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.checklist-item--done {
+    background: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.check-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.checklist-item--done .check-label {
+    text-decoration: line-through;
+    color: #a1a1aa;
+}
+
+.check-box {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid rgba(139, 92, 246, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #a78bfa;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.checklist-item--done .check-box {
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    border-color: transparent;
+    color: #fff;
+}
+
+.check-label {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #e0e0e5;
+    transition: color 0.2s ease;
+}
+
+.check-meta .time-est {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+/* ───────────────────────────────────────────
+   Detailed Study Topic Cards
+   ─────────────────────────────────────────── */
+
+.topic-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.topic-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 140px;
+    position: relative;
+    overflow: hidden;
+}
+
+.topic-card:hover {
+    transform: translateY(-4px);
+    background: rgba(43, 43, 60, 0.6);
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+}
+
+.topic-card--done::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #8b5cf6, #ec4899);
+}
+
+.topic-card-header {
+    margin-bottom: 1rem;
+}
+
+.topic-card-header h4 {
+    margin: 0 0 12px;
+    font-size: 1.15rem;
+    color: #f4f4f5;
+    line-height: 1.3;
+}
+
+.topic-tags {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.diff-badge,
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.diff-easy {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.diff-medium {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+.diff-hard {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+
+.status-done {
+    background: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+}
+
+.topic-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 1rem;
+}
+
+.topic-card-footer .time-est {
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+.open-module-btn {
+    background: none;
+    border: none;
+    color: #c4b5fd;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.topic-card:hover .open-module-btn {
+    color: #e879f9;
+    transform: translateX(2px);
+}
+
+.interview-lab-container .start-button {
+    margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+    .interview-lab-container {
+        padding: 100px 20px 40px;
+    }
+
+    .lab-header h2 {
+        font-size: 2.2rem;
+    }
+
+    .study-header-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .topic-cards-grid,
+    .checklist {
+        grid-template-columns: 1fr;
+    }
+}
