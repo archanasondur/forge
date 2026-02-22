@@ -11,6 +11,7 @@ function TopicDetail() {
 
     const [topicData, setTopicData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [notes, setNotes] = useState('');
 
     useEffect(() => {
         const loadStatus = async () => {
@@ -26,8 +27,18 @@ function TopicDetail() {
                 setLoading(false);
             }
         };
+
+        // Load local notes
+        const savedNotes = localStorage.getItem(`forge_notes_${topicId}`);
+        if (savedNotes) setNotes(savedNotes);
+
         loadStatus();
     }, [topicId]);
+
+    const handleNotesChange = (e) => {
+        setNotes(e.target.value);
+        localStorage.setItem(`forge_notes_${topicId}`, e.target.value);
+    };
 
     const handleToggleComplete = async () => {
         try {
@@ -53,41 +64,145 @@ function TopicDetail() {
                 <button className="back-btn" onClick={() => navigate('/interview-lab')}>← Back to Lab</button>
                 <div className="header-content">
                     <h1>{content.title}</h1>
-                    <div className="status-badge">
+                    <div className={`status-badge ${topicData?.completed ? 'completed' : ''}`}>
                         {topicData?.completed ? '✅ Completed' : '⏳ In Progress'}
                     </div>
                 </div>
             </header>
 
             <div className="topic-content-grid">
-                <section className="detail-card theory-card">
-                    <h2>📖 Theory & Concepts</h2>
-                    <p>{content.theory}</p>
-                </section>
+                {/* Left Column */}
+                <div className="main-content-column">
+                    {content.patternSnapshot ? (
+                        <>
+                            <section className="detail-card pattern-card">
+                                <h2>🎯 Pattern Snapshot</h2>
+                                <p>{content.patternSnapshot}</p>
+                            </section>
 
-                <section className="detail-card questions-card">
-                    <h2>❓ Common Interview Questions</h2>
-                    <ul>
-                        {content.questions.map((q, idx) => (
-                            <li key={idx}>{q}</li>
-                        ))}
-                    </ul>
-                </section>
+                            <section className="detail-card why-pattern-card">
+                                <h2>💡 Why this pattern?</h2>
+                                <ul>
+                                    {content.whyPattern?.map((bullet, idx) => (
+                                        <li key={idx}>{bullet}</li>
+                                    ))}
+                                </ul>
+                            </section>
 
-                <section className="detail-card task-card">
-                    <h2>💻 Mini Implementation Task</h2>
-                    <p>{content.task}</p>
-                </section>
-            </div>
+                            <section className="detail-card variations-card">
+                                <h2>🔄 Typical Variations</h2>
+                                <ul className="variation-list">
+                                    {content.typicalVariations?.map((variant, idx) => (
+                                        <li key={idx} className="variant-item">
+                                            {variant}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
 
-            <div className="topic-actions">
-                <button
-                    className={`mark-complete-btn ${topicData?.completed ? 'completed' : ''}`}
-                    onClick={handleToggleComplete}
-                    disabled={loading}
-                >
-                    {topicData?.completed ? 'Mark as Incomplete' : 'Mark as Complete'}
-                </button>
+                            <section className="detail-card practice-card">
+                                <h2>🏋️ Suggested LeetCode Problems</h2>
+                                <ul className="practice-list">
+                                    {content.externalProblems?.map((prob, idx) => (
+                                        <li key={idx} className="external-prob-item">
+                                            <div className="prob-header">
+                                                <a href={prob.url} target="_blank" rel="noopener noreferrer" className="prob-link" aria-label={`Open ${prob.name} on LeetCode`}>
+                                                    {prob.name} <span className="external-icon">↗</span>
+                                                </a>
+                                                <span className={`diff-badge diff-${prob.difficulty.toLowerCase()}`}>
+                                                    {prob.difficulty}
+                                                </span>
+                                            </div>
+                                            <p className="prob-note">{prob.note}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                        </>
+                    ) : (
+                        <>
+                            <section className="detail-card theory-card">
+                                <h2>📖 5-Minute Theory Summary</h2>
+                                <p>{content.theory}</p>
+                            </section>
+
+                            <section className="detail-card bullets-card">
+                                <h2>🔑 Key Takeaways</h2>
+                                <ul>
+                                    {content.keyBullets?.map((bullet, idx) => (
+                                        <li key={idx}>{bullet}</li>
+                                    ))}
+                                </ul>
+                            </section>
+
+                            <section className="detail-card questions-card">
+                                <h2>❓ Common Interview Questions</h2>
+                                <ul>
+                                    {content.questions?.map((q, idx) => (
+                                        <li key={idx}>{q}</li>
+                                    ))}
+                                </ul>
+                            </section>
+
+                            <section className="detail-card task-card">
+                                <h2>💻 Mini Implementation Task</h2>
+                                <p className="task-text">{content.task}</p>
+                            </section>
+                        </>
+                    )}
+
+                    <section className="detail-card notes-card">
+                        <h2>📝 Personal Notes</h2>
+                        <textarea
+                            value={notes}
+                            onChange={handleNotesChange}
+                            placeholder="Jot down formulas, ideas, or constraints here..."
+                        />
+                    </section>
+                </div>
+
+                {/* Right Column */}
+                <div className="side-content-column">
+                    <section className="detail-card complexity-card">
+                        <h2>⏱ Complexity Snapshot</h2>
+                        <div className="complexity-item">
+                            <span className="complexity-label">Time:</span>
+                            <span className="complexity-val">{content.complexity?.time}</span>
+                        </div>
+                        <div className="complexity-item">
+                            <span className="complexity-label">Space:</span>
+                            <span className="complexity-val">{content.complexity?.space}</span>
+                        </div>
+                    </section>
+
+                    <section className="detail-card pitfalls-card">
+                        <h2>⚠️ Common Pitfalls & Mistakes</h2>
+                        <ul>
+                            {(content.commonMistakes || content.pitfalls)?.map((pitfall, idx) => (
+                                <li key={idx}>{pitfall}</li>
+                            ))}
+                        </ul>
+                    </section>
+
+                    <section className="detail-card related-card">
+                        <h2>🔗 Suggested Related Topics</h2>
+                        <div className="related-tags">
+                            {content.related?.map((topic, idx) => (
+                                <span key={idx} className="related-tag">{topic}</span>
+                            ))}
+                        </div>
+                    </section>
+
+                    <div className="topic-actions">
+                        <button
+                            className={`mark-complete-btn ${topicData?.completed ? 'completed' : ''}`}
+                            onClick={handleToggleComplete}
+                            disabled={loading}
+                        >
+                            {topicData?.completed ? 'Mark as Incomplete' : 'Mark as Complete'}
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
