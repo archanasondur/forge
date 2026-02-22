@@ -1,182 +1,384 @@
 export const topicContent = {
+    // ────────────── DSA TOPICS (PATTERN-FIRST & EXTERNAL LINKS) ──────────────
     'arrays': {
         title: 'Arrays & Hashing',
-        theory: `Arrays are contiguous blocks of memory. They offer O(1) time complexity for reading/writing at a specific index. Hashing involves mapping keys to values using a hash function, allowing for O(1) average time complexity for insertions, deletions, and lookups. Hash maps (or dictionaries) are frequently used to count occurrences, track seen elements, or map relationships between data.`,
-        questions: [
-            'What is the difference between an Array and a Linked List?',
-            'How does a Hash Table handle collisions?',
-            'Explain the time complexity of searching in an unsorted array vs a Hash Table.'
+        patternSnapshot: 'Use a Hash Map or Set for O(1) lookups to track seen elements or count frequencies, avoiding nested loops.',
+        whyPattern: [
+            'Interviewers look for your ability to trade space for time (O(n) memory to achieve O(n) speed).',
+            'Fundamental for deduplication and building frequency maps.'
         ],
-        task: 'Implement a function `twoSum(nums, target)` that returns the indices of two numbers such that they add up to target. Use a hash map for an O(n) solution.'
+        typicalVariations: [
+            'Two Sum variants: Find pairs that sum to a target.',
+            'Frequency Counting: Determine anagrams or majority elements.'
+        ],
+        commonMistakes: [
+            'Using an array/list to track "seen" items resulting in O(n) lookups inside an O(n) loop.',
+            'Forgetting to handle edge cases like empty arrays or all-duplicate inputs.',
+            'Mutating the input array when it causes unexpected side effects.'
+        ],
+        externalProblems: [
+            { name: 'Contains Duplicate', difficulty: 'Easy', note: 'Core HashSet pattern.', url: 'https://leetcode.com/problems/contains-duplicate/' },
+            { name: 'Valid Anagram', difficulty: 'Easy', note: 'Core HashMap frequency counting.', url: 'https://leetcode.com/problems/valid-anagram/' },
+            { name: 'Group Anagrams', difficulty: 'Medium', note: 'Using sorted strings or char counts as Hash keys.', url: 'https://leetcode.com/problems/group-anagrams/' }
+        ],
+        rapidPrompts: [
+            'When is it appropriate to trade O(n) space for O(n) time using a Hash Map?',
+            'Name 2 edge cases when doing array frequency counting.',
+            'What is the worst-case lookup time for a Hash Table and why?'
+        ],
+        related: ['Two Pointers', 'Sliding Window']
     },
     'two-pointers': {
         title: 'Two Pointers',
-        theory: `The Two Pointer technique typically involves using two variables to keep track of indices in an array or string. They can move towards each other, in the same direction, or independently. It's highly effective for problems involving sorted arrays, finding pairs, or reversing elements in-place to achieve O(n) time complexity and O(1) space complexity.`,
-        questions: [
-            'When should you consider using the Two Pointer technique?',
-            'How is Two Pointers different from Sliding Window?',
-            'What must be true about an array for a Two Pointer approach (from opposite ends) to find a pair sum?'
+        patternSnapshot: 'Optimize sequential iterations using two variables pointing to indices, often moving towards each other.',
+        whyPattern: [
+            'Proves you can optimize O(n^2) nested loops into O(n) single passes.',
+            'Key invariant: The array must usually be sorted, or you are comparing ends (palindromes).'
         ],
-        task: 'Write a function `isPalindrome(s)` that checks if a string is a palindrome, ignoring non-alphanumeric characters and case, using two pointers from opposite ends.'
+        typicalVariations: [
+            'Collision: Pointers start at opposite ends and meet in the middle.',
+            'Fast/Slow: Pointers move in the same direction at different speeds.'
+        ],
+        commonMistakes: [
+            'Applying opposing Two Pointers to an unsorted array without sorting first.',
+            'Off-by-one errors resulting in infinite loops (e.g., using < instead of <= without care).',
+            'Failing to skip duplicate values when asked for unique pairs (like in 3Sum).'
+        ],
+        externalProblems: [
+            { name: 'Valid Palindrome', difficulty: 'Easy', note: 'Classic start/end collision pointer check.', url: 'https://leetcode.com/problems/valid-palindrome/' },
+            { name: 'Two Sum II - Input Sorted', difficulty: 'Medium', note: 'Using pointers instead of HashMaps for sorted data.', url: 'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/' },
+            { name: '3Sum', difficulty: 'Medium', note: 'Fix one element, use Two Pointers on the rest.', url: 'https://leetcode.com/problems/3sum/' }
+        ],
+        rapidPrompts: [
+            'What must be true about the array for the classic Start/End Two Pointers sum technique to work?',
+            'What happens to Time/Space complexity if an unsorted array forces you to sort it first?',
+            'How do Fast/Slow pointers detect cycles?'
+        ],
+        related: ['Arrays & Hashing', 'Linked Lists']
     },
     'sliding-window': {
         title: 'Sliding Window',
-        theory: `Sliding Window is an extension of Two Pointers focused on contiguous sub-arrays or sub-strings. You maintain a "window" of elements (usually defined by a left and right pointer) across the input. The window expands and contracts based on specific conditions, making it ideal for problems asking for the "longest", "shortest", or "max/min" contiguous subsegment.`,
-        questions: [
-            'What defines a "fixed" vs "variable" sliding window?',
-            'How do you update the window state when expanding vs contracting?',
-            'Give an example scenario where sliding window is significantly better than a brute force approach.'
+        patternSnapshot: 'Maintain a dynamic subset of elements using Left and Right pointers to satisfy a constraint.',
+        whyPattern: [
+            'Demonstrates ability to maintain running state (sums, counts) without recalculating from scratch.',
+            'Turns O(n*k) substring problems into strictly O(n) traversals.'
         ],
-        task: 'Implement `maxProfit(prices)` to find the maximum profit you can achieve from buying and selling a stock once (the classic sliding window/dynamic programming problem).'
+        typicalVariations: [
+            'Fixed Window: The window size never changes, you just slide it.',
+            'Dynamic Window: The window expands until invalid, then shrinks until valid again.'
+        ],
+        commonMistakes: [
+            'Updating the "best result" inside the shrinking loop instead of outside, missing edge targets.',
+            'Failing to decrement the outgoing element\'s state when dragging the Left pointer forward.',
+            'Handling variable window sizes with fixed window logic.'
+        ],
+        externalProblems: [
+            { name: 'Best Time to Buy and Sell Stock', difficulty: 'Easy', note: 'Simplest variation of dragging a min-pointer.', url: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/' },
+            { name: 'Longest Substring Without Repeating', difficulty: 'Medium', note: 'Dynamic window using a Set for uniqueness.', url: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/' },
+            { name: 'Minimum Window Substring', difficulty: 'Hard', note: 'Complex dynamic window with hash map character validation.', url: 'https://leetcode.com/problems/minimum-window-substring/' }
+        ],
+        rapidPrompts: [
+            'What distinguishes a Sliding Window from a standard Two Pointer approach?',
+            'How do you track the "state" characters inside your window efficiently?',
+            'Name 2 edge cases that could break a dynamic Sliding Window implementation.'
+        ],
+        related: ['Two Pointers', 'Arrays & Hashing']
     },
     'stacks': {
         title: 'Stacks & Queues',
-        theory: `Stacks follow LIFO (Last In, First Out) ordering. They are naturally implemented using arrays or linked lists and are fundamental to concepts like recursion, expression parsing, and backtracking. Queues follow FIFO (First In, First Out) ordering and are used in breadth-first search (BFS) and task scheduling.`,
-        questions: [
-            'How can you implement a Queue using two Stacks?',
-            'What are common use cases for a Stack?',
-            'Describe a Monotonic Stack and what it is used for.'
+        patternSnapshot: 'Use Stacks (LIFO) to evaluate nested scopes or Monotonic Stacks to find "Next Greater" elements.',
+        whyPattern: [
+            'Shows an understanding of tracking state history where the most recent event dictates the next action.',
+            'Monotonic stacks are the optimal way to solve "next greater/smaller element" queries in O(n).'
         ],
-        task: 'Write a function `isValid(s)` that takes a string of parentheses brackets `()[]{}` and determines if the input is valid using a stack.'
+        typicalVariations: [
+            'Matching Pairs: Validating parentheses or brackets.',
+            'Monotonic Decreasing: Finding the next greater element in an array.'
+        ],
+        commonMistakes: [
+            'Popping from an empty stack leading to undefined/null pointer errors.',
+            'In JavaScript, using array `.shift()` for a Queue, causing O(n) re-indexing (use two arrays or a linked list).',
+            'Storing values instead of indices in a Monotonic Stack, losing original positions.'
+        ],
+        externalProblems: [
+            { name: 'Valid Parentheses', difficulty: 'Easy', note: 'Core matching pairs stack pattern.', url: 'https://leetcode.com/problems/valid-parentheses/' },
+            { name: 'Evaluate Reverse Polish Notation', difficulty: 'Medium', note: 'Mathematical scope evaluation.', url: 'https://leetcode.com/problems/evaluate-reverse-polish-notation/' },
+            { name: 'Daily Temperatures', difficulty: 'Medium', note: 'Classic Monotonic Stack application.', url: 'https://leetcode.com/problems/daily-temperatures/' }
+        ],
+        rapidPrompts: [
+            'Why does searching a standard Stack take O(n) time?',
+            'What is the core invariant behind a Monotonic Stack?',
+            'How would you implement a functional Queue in UI code without O(n) array `.shift()`?'
+        ],
+        related: ['Linked Lists', 'Graphs (BFS / DFS)']
     },
     'binary-search': {
         title: 'Binary Search',
-        theory: `Binary Search is a divide-and-conquer algorithm that finds the position of a target value within a sorted array in O(log n) time. It repeatedly divides the search interval in half. The key is clearly defining the search space and the condition that allows you to safely discard half of it.`,
-        questions: [
-            'What is the required precondition for Binary Search?',
-            'How do you prevent integer overflow when calculating the mid-point (`(left+right)/2`)?',
-            'How can Binary Search be applied to an answer space rather than an index space?'
+        patternSnapshot: 'Halve the search space sequentially. Precondition: the dataset or answer space must be monotonic (sorted).',
+        whyPattern: [
+            'Proves you can optimize O(n) linear scans down to O(log n).',
+            'Interviewers test if you know how to search an "answer space" rather than just an array.'
         ],
-        task: 'Write `search(nums, target)` which applies binary search to find `target` in a sorted array `nums` returning its index, or -1 if not found.'
+        typicalVariations: [
+            'Standard target find: Locating an exact number in a sorted array.',
+            'Search over an Answer Space: Guessing a capacity and verifying if it works via a greedy helper.'
+        ],
+        commonMistakes: [
+            'Using `(left + right) / 2` causing integer overflow in typed languages.',
+            'Infinite loops because `left` and `right` do not cross correctly.',
+            'Incorrect loop conditions (`<` vs `<=`) or mid-pointer updates (`left = mid` instead of `mid + 1`).'
+        ],
+        externalProblems: [
+            { name: 'Binary Search', difficulty: 'Easy', note: 'The fundamental standard algorithm.', url: 'https://leetcode.com/problems/binary-search/' },
+            { name: 'Search a 2D Matrix', difficulty: 'Medium', note: 'Applying 1D binary search index formulas to a 2D grid.', url: 'https://leetcode.com/problems/search-a-2d-matrix/' },
+            { name: 'Koko Eating Bananas', difficulty: 'Medium', note: 'Searching over an implicit answer space.', url: 'https://leetcode.com/problems/koko-eating-bananas/' }
+        ],
+        rapidPrompts: [
+            'What is the formula to calculate `mid` safely without integer overflow?',
+            'When would you use `left < right` instead of `left <= right` in a loop condition?',
+            'What is the Time Complexity of searching over an Answer Space spanning 1 to K, where verification takes O(n)?'
+        ],
+        related: ['Trees & BSTs']
     },
     'linked-lists': {
         title: 'Linked Lists',
-        theory: `Linked Lists consist of nodes where each node contains data and a reference (pointer) to the next node in the sequence. Unlike arrays, they do not require contiguous memory, allowing for O(1) insertions/deletions at known positions, but O(n) access time since you must traverse from the head.`,
-        questions: [
-            'What is the difference between a Singly and Doubly Linked List?',
-            'How do you detect a cycle in a Linked List?',
-            'Explain the "Fast and Slow Pointer" technique (Floyd\'s Tortoise and Hare).'
+        patternSnapshot: 'Manipulate pointers carefully. Use a Dummy Node for changing heads. Use Fast/Slow pointers to find cycles.',
+        whyPattern: [
+            'Tests raw pointer manipulation and memory management awareness.',
+            'Evaluates if you understand traversing without having random access O(1) indices.'
         ],
-        task: 'Implement a function `reverseList(head)` that reverses a singly linked list in-place.'
+        typicalVariations: [
+            'Reversal: Reversing links in-place.',
+            'Fast/Slow (Tortoise & Hare): Finding a middle or detecting cyclic loops.'
+        ],
+        commonMistakes: [
+            'Losing the reference to `curr.next` before adjusting pointers, breaking the chain.',
+            'Null Pointer Exceptions from not checking if `head` or `head.next` is null.',
+            'Not returning the correct head after a reversal (returning `curr` instead of `prev`).'
+        ],
+        externalProblems: [
+            { name: 'Reverse Linked List', difficulty: 'Easy', note: 'Fundamental pointer manipulation loop.', url: 'https://leetcode.com/problems/reverse-linked-list/' },
+            { name: 'Merge Two Sorted Lists', difficulty: 'Easy', note: 'Dummy node usage and pointer sewing.', url: 'https://leetcode.com/problems/merge-two-sorted-lists/' },
+            { name: 'Linked List Cycle', difficulty: 'Easy', note: 'Fast & Slow pointer cycle detection.', url: 'https://leetcode.com/problems/linked-list-cycle/' }
+        ],
+        rapidPrompts: [
+            'What is the purpose of a Dummy Node?',
+            'Explain Floyd\'s Tortoise and Hare cycle detection complexity.',
+            'Name 2 edge cases when removing an Nth node from a Linked List.'
+        ],
+        related: ['Two Pointers']
     },
     'trees': {
         title: 'Trees & BSTs',
-        theory: `A Tree is a hierarchical data structure composed of nodes. A Binary Search Tree (BST) specifically enforces the property that a node\'s left child is smaller and its right child is larger. Tree traversal algorithms (In-order, Pre-order, Post-order, Level-order) form the foundation of most tree algorithms.`,
-        questions: [
-            'What are the time complexities for search, insert, and delete in a balanced and unbalanced BST?',
-            'What is the difference between DFS and BFS on a Tree?',
-            'What is an AVL tree or Red-Black tree designed to solve?'
+        patternSnapshot: 'Recursion is king. Nearly every tree problem requires traversing and passing a computed state up/down.',
+        whyPattern: [
+            'Shows mastery of Recursion and Call Stack evaluation.',
+            'Tests knowledge of Depth-First vs Breadth-First invariants depending on state requirements.'
         ],
-        task: 'Write a function `maxDepth(root)` that returns the maximum depth (number of nodes along the longest path from root to leaf) of a binary tree.'
+        typicalVariations: [
+            'DFS (Pre/In/Post Order): Traversing all the way down branches first. Usually O(h) space.',
+            'BFS (Level Order): Exploring neighbor levels using a Queue. O(w) space.'
+        ],
+        commonMistakes: [
+            'Forgetting the base case (`if (!node) return 0`) leading to infinite recursion.',
+            'Assuming a Binary Tree is inherently a Binary Search Tree (BST).',
+            'Over-complicating state by using global variables instead of passing parameters up the call stack.'
+        ],
+        externalProblems: [
+            { name: 'Maximum Depth of Binary Tree', difficulty: 'Easy', note: 'Standard DFS baseline.', url: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/' },
+            { name: 'Lowest Common Ancestor of a BST', difficulty: 'Medium', note: 'Utilizing BST properties to optimize traversal.', url: 'https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/' },
+            { name: 'Binary Tree Level Order Traversal', difficulty: 'Medium', note: 'Core BFS queue loop.', url: 'https://leetcode.com/problems/binary-tree-level-order-traversal/' }
+        ],
+        rapidPrompts: [
+            'What are the three main types of DFS traversal on a Tree?',
+            'What guarantees does a Binary Search Tree (BST) provide?',
+            'How is tree height space complexity related to best/worst case scenarios?'
+        ],
+        related: ['Graphs (BFS / DFS)', 'Binary Search']
     },
     'graphs': {
         title: 'Graphs (BFS / DFS)',
-        theory: `Graphs model relationships mapping entities (vertices/nodes) to concepts (edges). Edges can be directed or undirected, weighted or unweighted. BFS explores level-by-level using a queue (finding shortest paths in unweighted graphs), while DFS explores as far as possible along a branch before backtracking using recursion or a stack.`,
-        questions: [
-            'What are the different ways to represent a graph in code?',
-            'When would you choose BFS over DFS?',
-            'What is Topological Sort and when is it applicable?'
+        patternSnapshot: 'Graphs model entities. BFS guarantees shortest path on unweighted edges. DFS explores branches fully. ALWAYS track visited states.',
+        whyPattern: [
+            'Shows you can model real-world relationships (networks, dependencies).',
+            'Tests your ability to prevent infinite loops in cyclic data structures.'
         ],
-        task: 'Implement a function `numIslands(grid)` that counts the number of islands (connected components of \'1\'s) in a 2D grid using DFS or BFS.'
+        typicalVariations: [
+            'Matrix as a Graph: Traversing islands or grids using adjacent cell coordinates.',
+            'Adjacency List: Standard graph traversal tracking visited nodes.'
+        ],
+        commonMistakes: [
+            'Forgetting the `visited` set leading to infinite recursion/loops.',
+            'Marking a node visited AFTER popping it from a BFS queue instead of BEFORE pushing it, leading to duplicate pushed entries.',
+            'Failing to account for disconnected graph components.'
+        ],
+        externalProblems: [
+            { name: 'Number of Islands', difficulty: 'Medium', note: 'Classic grid traversal treating 1s as a connected graph.', url: 'https://leetcode.com/problems/number-of-islands/' },
+            { name: 'Clone Graph', difficulty: 'Medium', note: 'Deep copy node creation tracked with a Hash Map.', url: 'https://leetcode.com/problems/clone-graph/' },
+            { name: 'Course Schedule', difficulty: 'Medium', note: 'Topological sort / Cycle detection in a Directed Graph.', url: 'https://leetcode.com/problems/course-schedule/' }
+        ],
+        rapidPrompts: [
+            'When must you use BFS instead of DFS on an unweighted graph?',
+            'What is Topological Sort used for in DAGs?',
+            'What is the time complexity of BFS using an Adjacency List?'
+        ],
+        related: ['Trees & BSTs']
     },
     'dp': {
         title: 'Dynamic Programming',
-        theory: `Dynamic Programming solves complex problems by breaking them down into simpler subproblems and storing the results of subproblems to avoid redundant computation (memoization/tabulation). It applies when a problem exhibits overlapping subproblems and optimal substructure.`,
-        questions: [
-            'What is the difference between Top-Down (Memoization) and Bottom-Up (Tabulation) DP?',
-            'How do you typically identify that a problem can be solved with DP?',
-            'Explain the difference between DP and Divide and Conquer.'
+        patternSnapshot: 'Cache duplicate recursive calls. Identify State Variables and the State Transition Equation.',
+        whyPattern: [
+            'Proves you can optimize exponential O(2^n) brute force trees to polynomial time.',
+            'Demonstrates high mathematical and logical deductive reasoning.'
         ],
-        task: 'Write `climbStairs(n)`, where you can climb 1 or 2 steps at a time. Return how many distinct ways you can climb to the top using DP.'
+        typicalVariations: [
+            'Top-Down (Memoization): Recursion + HashMap cache. Easier to write naturally.',
+            'Bottom-Up (Tabulation): Iterative array building. Easier to space-optimize.'
+        ],
+        commonMistakes: [
+            'Failing to initialize base cases properly (e.g. out of bounds array accesses).',
+            'Allocating a massive N x M matrix when checking the state transition proves you only need the previous row (Space Optimization).',
+            'Over-complicating DP when a Greedy approach works.'
+        ],
+        externalProblems: [
+            { name: 'Climbing Stairs', difficulty: 'Easy', note: '1D DP, essentially Fibonacci sequence.', url: 'https://leetcode.com/problems/climbing-stairs/' },
+            { name: 'House Robber', difficulty: 'Medium', note: '1D DP with state decisions (include vs skip).', url: 'https://leetcode.com/problems/house-robber/' },
+            { name: 'Longest Common Subsequence', difficulty: 'Medium', note: 'Classic 2D String tabulation.', url: 'https://leetcode.com/problems/longest-common-subsequence/' }
+        ],
+        rapidPrompts: [
+            'What are the two core prerequisites for a problem to be solvable with DP?',
+            'Compare Top-Down Memoization vs Bottom-Up Tabulation tradeoffs.',
+            'How can you often optimize O(n) space in 1D DP down to O(1) space?'
+        ],
+        related: ['Trees & BSTs']
     },
+
+    // ────────────── SYSTEMS AND BEHAVIORAL (THEORY-DRIVEN) ──────────────
     'scaling': {
         title: 'Scaling Fundamentals',
-        theory: `Scaling entails expanding a system\'s capacity. Vertical scaling (scaling up) means adding more power (CPU, RAM) to an existing machine. Horizontal scaling (scaling out) means adding more machines to the pool. Horizontal scaling is generally preferred for modern web architectures due to better resilience and cost-efficiency at high loads.`,
-        questions: [
-            'What are the limits of vertical scaling?',
-            'What challenges arise when you horizontally scale a stateful application?',
-            'What is the CAP Theorem?'
+        theory: `Scaling expands capacity. Vertical scaling (up) adds machine power (CPU/RAM). Horizontal scaling (out) adds more machines. Horizontal is standard for modern architectures for resilience, though it requires a stateless app design.`,
+        keyBullets: [
+            'Vertical scaling has a hard hardware limit and creates single points of failure.',
+            'Horizontal scaling provides redundancy but introduces data consistency challenges.',
+            'Statelessness (e.g. JWTs instead of session state) is required for easy horizontal scaling.'
         ],
-        task: 'Draw out (or describe) a high-level architecture diagram showing a single-server setup migrating to a horizontally scaled setup behind a load balancer.'
+        complexity: { time: 'N/A', space: 'N/A' },
+        questions: ['What are the limits of vertical scaling?', 'What challenges arise when you horizontally scale a stateful application?'],
+        task: 'Draw a diagram showing a single-server setup migrating to a horizontally scaled setup behind a load balancer.',
+        pitfalls: ['Scaling the web servers while leaving the database unscaled (shifting the bottleneck).'],
+        related: ['Load Balancing', 'Databases']
     },
     'load-balancing': {
         title: 'Load Balancing',
-        theory: `Load balancers distribute incoming network traffic across multiple servers. This ensures no single server bears too much demand, improving responsiveness and availability. They can operate at Layer 4 (Transport, TCP/UDP) or Layer 7 (Application, HTTP) and use algorithms like Round Robin, Least Connections, or IP Hash.`,
-        questions: [
-            'What is the difference between a Layer 4 and Layer 7 load balancer?',
-            'How does a load balancer know if a backend server is healthy?',
-            'What is "sticky sessions" or "session affinity"?'
+        theory: `Load balancers distribute incoming traffic across multiple servers to prevent overload and handle failures. They operate at Layer 4 (Transport/IP) or Layer 7 (Application/HTTP).`,
+        keyBullets: [
+            'Routing algorithms: Round Robin, Least Connections, IP Hash.',
+            'Layer 7 balancing can route based on URL paths or HTTP headers.',
+            'Health checks ensure traffic is only sent to live, functioning instances.'
         ],
-        task: 'List three popular load balancing algorithms and write a sentence describing when you might use each.'
+        complexity: { time: 'N/A', space: 'N/A' },
+        questions: ['What is the difference between a Layer 4 and Layer 7 load balancer?', 'What is "session affinity" or sticky sessions?'],
+        task: 'List 3 popular routing algorithms and briefly describe when to use them.',
+        pitfalls: ['Making the load balancer itself a single point of failure (requires active-passive redundant LBs).'],
+        related: ['Scaling Fundamentals', 'Caching']
     },
     'caching': {
         title: 'Caching Strategies',
-        theory: `Caching stores copies of frequently accessed data in a fast, temporary storage layer (like RAM) to reduce the time it takes to serve future requests for that data. Common strategies include Cache-Aside, Read-Through, Write-Through, and Write-Back. Managing cache invalidation is one of the hardest problems in distributed systems.`,
-        questions: [
-            'What is the difference between Cache-Aside and Write-Through caching?',
-            'What happens when a cache memory fills up? (Eviction policies like LRU, LFU)',
-            'What is a "cache stampede" and how might you prevent it?'
+        theory: `Caching stores copies of data in fast, temporary storage (RAM/Redis) to drastically reduce latency and backend database load on future requests.`,
+        keyBullets: [
+            'Cache-Aside: App asks cache, if miss, asks DB, saves to cache, returns.',
+            'Write-Through: App writes to Cache, Cache synchronously writes to DB.',
+            'Eviction policies determine what to delete when full: LRU, LFU.'
         ],
-        task: 'Design a simple Cache-Aside wrapper function in pseudocode that checks the cache first, and if missing, reads from a database, saves to the cache, and returns the data.'
+        complexity: { time: 'N/A', space: 'N/A' },
+        questions: ['What is the difference between Cache-Aside and Write-Through caching?', 'What is a "cache stampede" and how might you prevent it?'],
+        task: 'Design a pseudo-code wrapper that implements a Cache-Aside retrieve algorithm.',
+        pitfalls: ['Caching data that changes too rapidly and requires constant invalidation.'],
+        related: ['Databases', 'Load Balancing']
     },
     'databases': {
         title: 'SQL vs NoSQL',
-        theory: `SQL databases (like PostgreSQL, MySQL) are relational, use structured schemas, and typically guarantee ACID properties. NoSQL databases (like MongoDB, Cassandra, DynamoDB) are non-relational, have highly flexible schemas, and often prioritize scalability and performance via BASE semantics, sacrificing strict consistency for availability.`,
-        questions: [
-            'When would you strictly choose a Relational (SQL) Database over NoSQL?',
-            'Explain the differences between Document, Key-Value, Column-Family, and Graph NoSQL databases.',
-            'What is database sharding and when is it necessary?'
+        theory: `SQL (Relational) databases use strict schemas and guarantee ACID properties, great for complex relationships. NoSQL (Non-relational) databases prioritize scalability/availability using BASE semantics, perfect for unstructured data.`,
+        keyBullets: [
+            'SQL scales vertically easily, but sharding horizontally is traditionally complex.',
+            'NoSQL types: Document (MongoDB), Key-Value (Redis), Wide-Column (Cassandra), Graph (Neo4j).',
+            'Denormalization is heavily used in NoSQL to avoid costly joins.'
         ],
-        task: 'Define a simple schema for a "User profile and their posts". Do it once applying normal forms for SQL, and once as a JSON document structure for a Document DB.'
+        complexity: { time: 'N/A', space: 'N/A' },
+        questions: ['When would you strictly choose a Relational DB over NoSQL?', 'Explain the differences between Document and Key-Value stores.'],
+        task: 'Define a schema for "Users and Posts". Once in 3rd Normal Form for SQL, once as a JSON document for NoSQL.',
+        pitfalls: ['Applying heavy relational constraints and joins inside a NoSQL document database.'],
+        related: ['Scaling Fundamentals', 'Caching']
     },
     'api-design': {
         title: 'API Design',
-        theory: `APIs (Application Programming Interfaces) define how software components communicate. REST (Representational State Transfer) is a common architectural style using standard HTTP methods (GET, POST, PUT, DELETE) and resource-based URLs. GraphQL and gRPC are alternative modern API paradigms offering different trade-offs in payload flexibility and performance.`,
-        questions: [
-            'What makes an API "RESTful"?',
-            'What are the trade-offs of using GraphQL vs REST?',
-            'How do you handle API versioning?'
+        theory: `APIs define system communication boundaries. REST is the standard architectural style using HTTP semantics. Modern alternatives include GraphQL (flexible, single-endpoint querying) and gRPC (high performance, binary protocol).`,
+        keyBullets: [
+            'REST uses standard HTTP methods: GET, POST, PUT, PATCH, DELETE.',
+            'URLs should represent nouns (resources), not action verbs.',
+            'Pagination, Filtering, and Versioning are required for scalable APIs.'
         ],
-        task: 'Design the REST endpoints (URLs and HTTP methods) required for a basic CRUD application to manage "Books" in a library.'
+        complexity: { time: 'N/A', space: 'N/A' },
+        questions: ['What constraints make an API TRULY RESTful?', 'What are the trade-offs of using GraphQL vs REST?'],
+        task: 'Design 5 REST endpoints (URLs + methods) required to manage "Books" in a library app.',
+        pitfalls: ['Using verbs in URLs (`/getBooks` instead of `GET /books`).'],
+        related: ['Scaling Fundamentals', 'Load Balancing']
     },
     'star': {
         title: 'STAR Method Practice',
-        theory: `The STAR method is a structured manner of responding to behavioral interview questions. STAR stands for Situation (set the scene), Task (describe your responsibility), Action (explain exactly what YOU did), and Result (share the outcome, quantified if possible).`,
-        questions: [
-            'Tell me about a time you failed.',
-            'Describe a situation where you had to work under a tight deadline.',
-            'What is your proudest professional achievement?'
+        theory: `STAR (Situation, Task, Action, Result) structures behavioral responses. It keeps anecdotes concise, focuses on your specific contributions, and ensures you highlight the impact and learnings.`,
+        keyBullets: [
+            'Situation: Set the context briefly.',
+            'Task: What was the goal or problem?',
+            'Action: What did YOU do specifically? Use "I" not "We".',
+            'Result: Quantify the outcome (metrics, revenue, latency saved).'
         ],
-        task: 'Draft one complete STAR story for a technical project you built recently. Keep it under 2 minutes when spoken aloud.'
+        complexity: { time: 'N/A', space: 'N/A' },
+        questions: ['Tell me about a time you failed.', 'Describe a situation where you worked under a tight deadline.'],
+        task: 'Draft one complete STAR story for a technical project keeping it under 2 minutes when spoken.',
+        pitfalls: ['Spending 80% of the time on the Situation, and rushing the Action/Result.'],
+        related: ['Teamwork Stories', 'Leadership Examples']
     },
     'teamwork': {
         title: 'Teamwork Stories',
-        theory: `Interviewers ask teamwork questions to gauge your collaboration skills, empathy, and ability to elevate those around you. Good teamwork stories highlight communication, shared goals, division of labor, and how you supported struggling teammates.`,
-        questions: [
-            'Tell me about a time you disagreed with a team member. How did you resolve it?',
-            'Describe a time you had to rely on others to accomplish a goal.',
-            'Have you ever worked with a difficult colleague? How did you handle it?'
+        theory: `Teamwork questions gauge your collaboration, empathy, and ability to elevate peers. Strong responses showcase communication, psychological safety, and unblocking teammates.`,
+        keyBullets: [
+            'Highlight mentorship, code reviews, and cross-functional communication.',
+            'Avoid throwing teammates under the bus when discussing friction.',
+            'Discuss shared successes and how you compromise on technical disagreements.'
         ],
-        task: 'List three discrete scenarios from your past experience where you collaborated with others to solve a tough engineering or design problem.'
+        complexity: { time: 'N/A', space: 'N/A' },
+        questions: ['Tell me about a time you disagreed with a team member.', 'Have you ever worked with a difficult colleague? How did you handle it?'],
+        task: 'List 3 scenarios where you collaborated with others to solve a tough engineering problem.',
+        pitfalls: ['Sounding arrogant or claiming sole credit for team achievements.'],
+        related: ['Conflict Resolution', 'STAR Method Practice']
     },
     'conflict': {
         title: 'Conflict Resolution',
-        theory: `Conflict resolution stories show your maturity. The focus shouldn't be on the fact that conflict existed (conflict is normal), but on your process for de-escalating, listening, finding compromises, and maintaining professional relationships productively.`,
-        questions: [
-            'Tell me about a time you strongly disagreed with your manager.',
-            'How do you handle pushback on a technical design you proposed?',
-            'Describe a situation where miscommunication caused a major issue.'
+        theory: `These stories prove your emotional intelligence. Conflict is inevitable; interviewers want to see that you approach disagreements logically, openly, and professionally rather than emotionally.`,
+        keyBullets: [
+            'Focus on resolving the issue, not winning the argument.',
+            'Use data and customer needs as the ultimate tie-breaker in technical conflicts.',
+            'Acknowledge the other party\'s valid points.'
         ],
-        task: 'Write a script of how you would respond if a senior engineer bluntly rejected your pull request without giving constructive reasons.'
+        complexity: { time: 'N/A', space: 'N/A' },
+        questions: ['Tell me about a time you strongly disagreed with your manager.', 'How do you handle pushback on a design you proposed?'],
+        task: 'Script a polite, constructive response to a senior engineer abruptly rejecting your PR.',
+        pitfalls: ['Pretending you have never experienced conflict.'],
+        related: ['Teamwork Stories', 'Leadership Examples']
     },
     'leadership': {
         title: 'Leadership Examples',
-        theory: `You don\'t need a management title to show leadership. Leadership in interviews often means taking initiative, owning an ambiguous problem from start to finish, mentoring junior engineers, or recognizing a process inefficiency and fixing it autonomously.`,
-        questions: [
-            'Tell me about a time you took the lead on a project.',
-            'Describe a situation where you saw a problem and took initiative to fix it without being asked.',
-            'How do you balance guiding others while ensuring you complete your own work?'
+        theory: `Leadership is demonstrated through ownership and initiative, not titles. It means tackling ambiguous problems, proposing process improvements, or guiding a project to completion autonomously.`,
+        keyBullets: [
+            'Examples: Leading a refactor, improving CI/CD, onboarding a junior dev.',
+            'Focus on "leading through influence" when you don’t have formal authority.',
+            'Demonstrate the ability to balance your own tickets while helping the larger team.'
         ],
-        task: 'Identify a time when you stepped out of your strictly defined role to help a project succeed. Outline the Situation, Action, and Result.'
+        complexity: { time: 'N/A', space: 'N/A' },
+        questions: ['Tell me about a time you took the lead on a project.', 'Describe a time you fixed a problem without being asked.'],
+        task: 'Identify a time you stepped out of your defined role to ensure project success. Outline the STAR.',
+        pitfalls: ['Confusing leadership with bossing people around.'],
+        related: ['STAR Method Practice', 'Teamwork Stories']
     }
 };
