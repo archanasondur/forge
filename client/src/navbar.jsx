@@ -11,7 +11,6 @@ function NavBar() {
             <Link to="/dashboard" className="nav-item">Dashboard</Link>
             <Link to="/job-tracker" className="nav-item">Job Tracker</Link>
             <Link to="/interview-lab" className="nav-item">Interview Lab</Link>
-            <Link to="/contact" className="nav-item">Contact</Link>
         </nav>
     );
 }
