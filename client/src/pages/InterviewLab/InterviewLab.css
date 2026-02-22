@@ -1,0 +1,641 @@
+/* ───────────────────────────────────────────
+   Interview Lab — Page Layout
+   ─────────────────────────────────────────── */
+
+.interview-lab-container {
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #f4f4f5;
+    padding: 100px 40px 60px;
+    box-sizing: border-box;
+    position: relative;
+    animation: labFadeIn 0.5s ease;
+}
+
+.interview-lab-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+@keyframes labFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ── Header ── */
+
+.lab-header {
+    text-align: center;
+    margin-bottom: 36px;
+    position: relative;
+    z-index: 1;
+}
+
+.lab-header h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 0 0 12px;
+    background: linear-gradient(135deg, #a78bfa, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.lab-header p {
+    font-size: 1.15rem;
+    color: #d1d5db;
+    margin: 0;
+}
+
+/* ── Tab Bar ── */
+
+.lab-tabs {
+    display: flex;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 5px;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.lab-tab {
+    padding: 11px 28px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #a1a1aa;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.lab-tab:hover {
+    color: #f4f4f5;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.lab-tab--active {
+    color: #fff;
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.45);
+    font-weight: 600;
+}
+
+/* ── Content Area ── */
+
+.lab-content {
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+    z-index: 1;
+}
+
+.fade-in {
+    animation: panelFadeIn 0.35s ease;
+}
+
+@keyframes panelFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ───────────────────────────────────────────
+   Stories Tab
+   ─────────────────────────────────────────── */
+
+.stories-panel .filter-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.stories-panel .filter-button,
+.stories-panel .active-filter {
+    padding: 10px 22px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.stories-panel .filter-button {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    color: #f4f4f5;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.stories-panel .filter-button:hover {
+    background: rgba(139, 92, 246, 0.2);
+    border-color: rgba(139, 92, 246, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.stories-panel .active-filter {
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    color: #fff;
+    font-weight: 600;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+}
+
+.stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 22px;
+}
+
+.story-card {
+    padding: 26px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.story-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #8b5cf6, #ec4899);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.story-card:hover::before {
+    opacity: 1;
+}
+
+.story-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.story-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #a78bfa;
+    background: rgba(139, 92, 246, 0.15);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.story-card h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #f4f4f5;
+    margin: 0 0 6px;
+}
+
+.story-author {
+    font-size: 0.85rem;
+    color: #a1a1aa;
+    margin: 0 0 10px;
+}
+
+.story-summary {
+    font-size: 0.95rem;
+    color: #d1d5db;
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* ───────────────────────────────────────────
+   Study Plan Tab
+   ─────────────────────────────────────────── */
+
+.progress-bar-wrapper {
+    margin-bottom: 32px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #a1a1aa;
+    margin-bottom: 8px;
+}
+
+.progress-track {
+    height: 8px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, #8b5cf6, #ec4899);
+    transition: width 0.4s ease;
+}
+
+.study-section {
+    margin-bottom: 28px;
+}
+
+.study-section h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #e0e0e5;
+    margin: 0 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.checklist-item:hover {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: rgba(139, 92, 246, 0.25);
+}
+
+.checklist-item--done {
+    background: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.checklist-item--done .check-label {
+    text-decoration: line-through;
+    color: #a1a1aa;
+}
+
+.check-box {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid rgba(139, 92, 246, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #a78bfa;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.checklist-item--done .check-box {
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    border-color: transparent;
+    color: #fff;
+}
+
+.check-label {
+    font-size: 0.95rem;
+    color: #e0e0e5;
+    transition: color 0.2s ease;
+}
+
+/* ───────────────────────────────────────────
+   Resources Tab
+   ─────────────────────────────────────────── */
+
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.resource-card {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.resource-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #8b5cf6, #ec4899);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.resource-card:hover::before {
+    opacity: 1;
+}
+
+.resource-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.resource-tag {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #ec4899;
+    background: rgba(236, 72, 153, 0.12);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.resource-card h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #f4f4f5;
+    margin: 0 0 8px;
+}
+
+.resource-card p {
+    font-size: 0.9rem;
+    color: #d1d5db;
+    line-height: 1.5;
+    margin: 0;
+    flex: 1;
+}
+
+.resource-arrow {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 1.2rem;
+    color: #a78bfa;
+    transition: transform 0.2s ease;
+}
+
+.resource-card:hover .resource-arrow {
+    transform: translateX(4px);
+}
+
+/* ───────────────────────────────────────────
+   Go Back button override (reuses .start-button from App.css)
+   ─────────────────────────────────────────── */
+
+.interview-lab-container .start-button {
+    margin-top: 40px;
+}
+
+/* ───────────────────────────────────────────
+   Responsive
+   ─────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+    .interview-lab-container {
+        padding: 100px 20px 40px;
+    }
+
+    .lab-header h2 {
+        font-size: 2.2rem;
+    }
+
+    .lab-tabs {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .lab-tab {
+        padding: 9px 18px;
+        font-size: 0.85rem;
+    }
+
+    .stories-grid,
+    .resources-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .checklist {
+        grid-template-columns: 1fr;
+    }
+}.topic-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1rem;
+}
+
+.topic-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 120px;
+    position: relative;
+    overflow: hidden;
+}
+
+.topic-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-color);
+    box-shadow: 0 6px 16px rgba(100, 108, 255, 0.15);
+}
+
+.topic-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.topic-card-header h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    line-height: 1.3;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--border-color);
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+.topic-card--done .status-dot {
+    background-color: var(--primary-color);
+    box-shadow: 0 0 8px var(--primary-color);
+}
+
+.topic-card--done::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--primary-color);
+}
+
+.topic-card-action {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.topic-card:hover .topic-card-action {
+    opacity: 1;
+}
+
+/* Toggle Switch Styles */
+.study-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.mode-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--bg-card);
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    border: 1px solid var(--border-color);
+}
+
+.mode-toggle span {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+}
+
+.mode-toggle span.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #4a4a4a;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: var(--primary-color);
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px var(--primary-color);
+}
+
+input:checked+.slider:before {
+    transform: translateX(20px);
+}
+
+.slider.round {
+    border-radius: 24px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}

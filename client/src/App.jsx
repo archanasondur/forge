@@ -1,11 +1,11 @@
-import { Routes, Route } from 'react-router-dom';
-import JourneyWall from './JourneyWall';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import NavBar from './navbar';
-import StudyPlan from './StudyPlan';
-import JobTracker from './JobTracker';
+import Dashboard from './pages/Dashboard/Dashboard';
+import JobTracker from './pages/JobTracker/JobTracker';
+import InterviewLab from './pages/InterviewLab/InterviewLab';
+import TopicDetail from './pages/InterviewLab/TopicDetail';
 import ContactUs from './ContactUs';
-import Home from './Home';
 
 
 function App() {
@@ -14,11 +14,12 @@ function App() {
       <NavBar />
       <main className="route-content">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/journey-wall" element={<JourneyWall />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/job-tracker" element={<JobTracker />} />
-          <Route path="/study-plan" element={<StudyPlan />} />
-          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/interview-lab" element={<InterviewLab />} />
+          <Route path="/interview-lab/:topicId" element={<TopicDetail />} />
+          <Route path="/contact" element={<ContactUs />} />
         </Routes>
       </main>
     </div>

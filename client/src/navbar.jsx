@@ -1,20 +1,17 @@
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './navbar.css';
 
 function NavBar() {
-    return(
+    return (
         <nav className='navbar'>
-            <Link to="/" className="nav-logo">
-                {/* <img src="/fo-go.png" alt="Forge logo" className="logo-icon" /> */}
+            <Link to="/dashboard" className="nav-logo">
                 <img src="/forge-icon.png" alt="Forge logo" className="logo-icon" />
             </Link>
 
-
-            <Link to="/" className="nav-item">Home</Link>
-            <Link to="/journey-wall" className="nav-item">Journey Wall</Link>
+            <Link to="/dashboard" className="nav-item">Dashboard</Link>
             <Link to="/job-tracker" className="nav-item">Job Tracker</Link>
-            <Link to="/study-plan" className="nav-item">Study Plan</Link>
-            <Link to="/contact-us" className="nav-item">Contact Us</Link>
+            <Link to="/interview-lab" className="nav-item">Interview Lab</Link>
+            <Link to="/contact" className="nav-item">Contact</Link>
         </nav>
     );
 }

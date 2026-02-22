@@ -23,10 +23,10 @@ Forge is a full-stack career companion that helps students and early-career devs
 ---
 
 ## Features
-- Landing page with motivational branding
-- JourneyWall to browse success stories and roadmaps
-- Job Tracker with statistics and application tracking
-- Coming soon: Kanban Board, Resume Insights, AI JD Parser
+- Dashboard — a high-level command center for tracking job applications and interview prep progress
+- Job Tracker — comprehensive CRUD management and Kanban Board for applications
+- Interview Lab — tabbed page for success stories, interactive study plan checklists synced with the database, and curated prep resources
+- Coming soon: Resume Insights, AI JD Parser
 
 ---
 
