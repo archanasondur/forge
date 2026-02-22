@@ -30,12 +30,19 @@ function InterviewLab() {
     const [studyTopics, setStudyTopics] = useState([]);
     const [isRapidRevision, setIsRapidRevision] = useState(false);
 
+    // Rapid Revision Config State
+    const [sprintConfigActive, setSprintConfigActive] = useState(false);
+    const [selectedTimebox, setSelectedTimebox] = useState(30); // 15, 30, 45, 60
+    const [selectedType, setSelectedType] = useState('All'); // All, DSA, System Design, Behavioral
+    const [selectedTopicIds, setSelectedTopicIds] = useState([]);
+    const [previewProblems, setPreviewProblems] = useState([]);
+
     // Active Sprint State
     const [isSprintActive, setIsSprintActive] = useState(false);
     const [sprintTopics, setSprintTopics] = useState([]);
     const [currentSprintIndex, setCurrentSprintIndex] = useState(0);
     const [sprintResults, setSprintResults] = useState([]);
-    const [timeRemaining, setTimeRemaining] = useState(1800); // 30 minutes in seconds
+    const [timeRemaining, setTimeRemaining] = useState(1800); // changes based on selectedTimebox
     const [isSprintComplete, setIsSprintComplete] = useState(false);
 
     useEffect(() => {
@@ -99,33 +106,107 @@ function InterviewLab() {
         return `${m}:${s < 10 ? '0' : ''}${s}`;
     };
 
-    const startSprint = () => {
-        // Gather up to 10 un-completed topics or a mix for the sprint
-        const allItems = studyTopics.flatMap(s => s.items);
-        const remaining = allItems.filter(i => !i.done);
+    const handleTopicToggle = (topicId) => {
+        setSelectedTopicIds(prev =>
+            prev.includes(topicId) ? prev.filter(id => id !== topicId) : [...prev, topicId]
+        );
+    };
 
-        // Take up to 10
-        const selected = remaining.sort(() => 0.5 - Math.random()).slice(0, 10);
-
-        const processSprintTopics = (topicsArr) => {
-            return topicsArr.map(t => {
-                const prompts = t.content?.rapidPrompts || t.content?.questions || [];
-                const activePrompt = prompts.length > 0 ? prompts[Math.floor(Math.random() * prompts.length)] : null;
-                return { ...t, activePrompt };
-            });
-        };
-
-        if (selected.length === 0) {
-            // If all done, grab random 5 for review
-            const fallback = allItems.sort(() => 0.5 - Math.random()).slice(0, 5);
-            setSprintTopics(processSprintTopics(fallback));
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            const allIds = studyTopics.flatMap(s => s.items).map(i => i.id);
+            setSelectedTopicIds(allIds);
         } else {
-            setSprintTopics(processSprintTopics(selected));
+            setSelectedTopicIds([]);
+        }
+    };
+
+    // Generate Preview Table whenever config changes
+    useEffect(() => {
+        if (!isRapidRevision || isSprintActive || isSprintComplete) return;
+
+        let availableTopics = studyTopics.flatMap(s => s.items);
+
+        // Filter by Type
+        if (selectedType !== 'All') {
+            const sectionMap = { 'DSA': 1, 'System Design': 2, 'Behavioral': 3 };
+            const sectionId = sectionMap[selectedType];
+            const sectionData = studyTopics.find(s => s.id === sectionId);
+            availableTopics = sectionData ? sectionData.items : [];
         }
 
+        // Filter by Selected Topics
+        if (selectedTopicIds.length > 0) {
+            availableTopics = availableTopics.filter(t => selectedTopicIds.includes(t.id));
+        }
+
+        // Fallback if empty
+        if (availableTopics.length === 0) {
+            availableTopics = studyTopics.flatMap(s => s.items);
+        }
+
+        // Timebox Rules
+        let rules = { beginner: 0, intermediate: 0, advanced: 0 };
+        if (selectedTimebox === 15) { rules = { beginner: 2 }; }
+        else if (selectedTimebox === 30) { rules = { beginner: 2, intermediate: 1 }; }
+        else if (selectedTimebox === 45) { rules = { beginner: 1, intermediate: 2 }; }
+        else if (selectedTimebox === 60) { rules = { intermediate: 2, advanced: 1 }; }
+
+        let generated = [];
+
+        // Helper to grab random items of difficulty
+        const grab = (diff, count) => {
+            const pool = availableTopics.filter(t => t.difficulty.toLowerCase() === diff);
+            // shuffle pool
+            const shuffled = [...pool].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        };
+
+        const reqB = rules.beginner || 0;
+        const reqI = rules.intermediate || 0;
+        const reqA = rules.advanced || 0;
+
+        let selectedB = grab('beginner', reqB);
+        let selectedI = grab('intermediate', reqI);
+        let selectedA = grab('advanced', reqA);
+
+        // If we didn't find enough, grab from anywhere to fill the gap
+        let totalNeeded = reqB + reqI + reqA;
+        let currentTotal = selectedB.length + selectedI.length + selectedA.length;
+
+        let combined = [...selectedB, ...selectedI, ...selectedA];
+
+        if (currentTotal < totalNeeded) {
+            const remainingPool = availableTopics.filter(t => !combined.find(c => c.id === t.id));
+            const extra = [...remainingPool].sort(() => 0.5 - Math.random()).slice(0, totalNeeded - currentTotal);
+            combined = [...combined, ...extra];
+        }
+
+        // Process for display (assign prompt, extract URL if present)
+        const processed = combined.map(t => {
+            const prompts = t.content?.rapidPrompts || t.content?.questions || [];
+            const activePrompt = prompts.length > 0 ? prompts[Math.floor(Math.random() * prompts.length)] : null;
+            const externalProblem = t.content?.externalProblems?.[0];
+
+            return {
+                ...t,
+                activePrompt,
+                externalUrl: externalProblem?.url,
+                externalName: externalProblem?.name
+            };
+        });
+
+        setPreviewProblems(processed);
+    }, [isRapidRevision, selectedTimebox, selectedType, selectedTopicIds, studyTopics, isSprintActive, isSprintComplete]);
+
+
+    const startSprint = () => {
+        if (previewProblems.length === 0) return;
+
+        setSprintTopics(previewProblems);
         setSprintResults([]);
         setCurrentSprintIndex(0);
-        setTimeRemaining(1800); // Reset timer
+        setTimeRemaining(selectedTimebox * 60); // Set timer based on timebox
         setIsSprintComplete(false);
         setIsSprintActive(true);
     };
@@ -136,11 +217,22 @@ function InterviewLab() {
         // If confident and it was theoretically 'un-done', mark it done via API
         if (isConfident) {
             try {
-                // We don't have the exact state to know if it requires a toggle,
-                // but usually if they are confident we just ensure it's recorded.
-                // For now, we will just record it in the temporary sprint result state
-                // to show in the summary screen.
-            } catch (e) { console.error(e) }
+                // Determine if we need to call API (if it was not previously done)
+                const originalTopic = studyTopics.flatMap(s => s.items).find(t => t.id === topicId);
+                if (originalTopic && !originalTopic.done) {
+                    await api.put(`/study-progress/${topicId}`, { completed: true });
+
+                    // Update local studyTopics state
+                    setStudyTopics(prev => prev.map(section => ({
+                        ...section,
+                        items: section.items.map(item =>
+                            item.id === topicId ? { ...item, done: true } : item
+                        )
+                    })));
+                }
+            } catch (e) {
+                console.error("Failed to update progress:", e);
+            }
         }
 
         if (currentSprintIndex + 1 < sprintTopics.length) {
@@ -175,25 +267,25 @@ function InterviewLab() {
                         <div className="sprint-stats">
                             <div className="stat-box">
                                 <h3>{sprintResults.length}</h3>
-                                <p>Topics Reviewed</p>
+                                <p>Topics Seen</p>
                             </div>
                             <div className="stat-box">
                                 <h3>{confidentCount}</h3>
-                                <p>Mastered</p>
+                                <p>Solved</p>
                             </div>
                             <div className="stat-box">
                                 <h3>{weakTopics.length}</h3>
-                                <p>Needs Work</p>
+                                <p>Skipped</p>
                             </div>
                         </div>
 
                         {weakTopics.length > 0 && (
                             <div className="weak-areas-box">
-                                <h3>Focus Areas:</h3>
+                                <h3>Suggested Review:</h3>
                                 <ul>
                                     {weakTopics.map(w => {
                                         const topic = sprintTopics.find(t => t.id === w.id);
-                                        return <li key={w.id}>{topic.label}</li>;
+                                        return <li key={w.id}>{topic?.label || 'Topic'}</li>;
                                     })}
                                 </ul>
                                 <p className="module-suggestion">
@@ -249,11 +341,11 @@ function InterviewLab() {
                     </div>
 
                     <div className="sprint-actions">
-                        <button className="action-btn review-btn" onClick={() => handleSprintAction(currentTopic.id, false)}>
-                            Need Review ❌
+                        <button className="action-btn skip-btn" onClick={() => handleSprintAction(currentTopic.id, false)}>
+                            Skip
                         </button>
                         <button className="action-btn confident-btn" onClick={() => handleSprintAction(currentTopic.id, true)}>
-                            Confident ✅
+                            Mark Solved ✅
                         </button>
                     </div>
                 </div>
@@ -305,17 +397,111 @@ function InterviewLab() {
                     </div>
 
                     {isRapidRevision ? (
-                        <div className="sprint-landing fade-in">
-                            <div className="sprint-landing-card">
-                                <h3>⚡ Rapid Revision Engine</h3>
-                                <p>Enter a highly focused, timed session to test your recall on randomized topics. Build confidence without distractions.</p>
-                                <ul className="sprint-features">
-                                    <li>✓ 30-Minute Timed Session</li>
-                                    <li>✓ Active Recall Prompts</li>
-                                    <li>✓ Performance Summary</li>
-                                </ul>
-                                <button className="start-sprint-btn" onClick={startSprint}>
-                                    Start 30-Minute Sprint
+                        <div className="sprint-config-container fade-in">
+                            <div className="sprint-config-sidebar">
+                                <h3>⚙️ Sprint Configuration</h3>
+
+                                <div className="config-group">
+                                    <label>Timebox</label>
+                                    <div className="timebox-selector" role="radiogroup" aria-label="Select Sprint Duration">
+                                        {[15, 30, 45, 60].map(mins => (
+                                            <button
+                                                key={mins}
+                                                className={`timebox-btn ${selectedTimebox === mins ? 'active' : ''}`}
+                                                onClick={() => setSelectedTimebox(mins)}
+                                                aria-checked={selectedTimebox === mins}
+                                                role="radio"
+                                            >
+                                                {mins}m
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="config-group">
+                                    <label>Problem Type</label>
+                                    <select
+                                        className="type-select"
+                                        value={selectedType}
+                                        onChange={(e) => setSelectedType(e.target.value)}
+                                        aria-label="Filter by Topic Type"
+                                    >
+                                        <option value="All">All Types</option>
+                                        <option value="DSA">Data Structures & Algorithms</option>
+                                        <option value="System Design">System Design</option>
+                                        <option value="Behavioral">Behavioral</option>
+                                    </select>
+                                </div>
+
+                                <div className="config-group">
+                                    <div className="pool-header">
+                                        <label>Topics Pool</label>
+                                        <label className="select-all-toggle">
+                                            <input type="checkbox" onChange={handleSelectAll} aria-label="Select All Topics" />
+                                            <span>All</span>
+                                        </label>
+                                    </div>
+                                    <div className="topic-multiselect">
+                                        {studyTopics.flatMap(s => s.items).filter(t => selectedType === 'All' || studyTopics.find(st => st.id === (selectedType === 'DSA' ? 1 : selectedType === 'System Design' ? 2 : 3))?.items.includes(t)).map(t => (
+                                            <label key={t.id} className="topic-checkbox">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedTopicIds.includes(t.id)}
+                                                    onChange={() => handleTopicToggle(t.id)}
+                                                    aria-label={`Select ${t.label}`}
+                                                />
+                                                <span className="checkbox-label">{t.label}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="sprint-preview-panel">
+                                <h3>📋 Generated Sprint Preview</h3>
+                                <p className="preview-desc">Based on your rules ({selectedTimebox}m), we've generated the following sequence:</p>
+
+                                <div className="preview-table-container">
+                                    <table className="preview-table" aria-label="Sprint Problem Preview">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Difficulty</th>
+                                                <th>Suggested Time</th>
+                                                <th>Topic / Problem</th>
+                                                <th>External</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {previewProblems.length > 0 ? previewProblems.map((prob, idx) => (
+                                                <tr key={idx}>
+                                                    <td>{idx + 1}</td>
+                                                    <td><span className={`diff-badge diff-${prob.difficulty.toLowerCase()}`}>{prob.difficulty}</span></td>
+                                                    <td>{prob.time}</td>
+                                                    <td>
+                                                        <div className="preview-prob-title">{prob.label}</div>
+                                                        <div className="preview-prob-sub">{prob.externalName || "Internal Task"}</div>
+                                                    </td>
+                                                    <td className="center-col">
+                                                        {prob.externalUrl ? <span className="external-icon" aria-label="Has External Link">↗</span> : <span aria-label="Internal Only">—</span>}
+                                                    </td>
+                                                </tr>
+                                            )) : (
+                                                <tr>
+                                                    <td colSpan="5" className="empty-table">No topics match current filters. Expanding pool...</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <button
+                                    className="start-sprint-btn fade-in"
+                                    onClick={startSprint}
+                                    disabled={previewProblems.length === 0}
+                                    aria-label={`Start ${selectedTimebox} minute sprint`}
+                                >
+                                    Start {selectedTimebox}-Minute Sprint
                                 </button>
                             </div>
                         </div>

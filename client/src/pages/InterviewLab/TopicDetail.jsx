@@ -165,13 +165,13 @@ function TopicDetail() {
                 <div className="side-content-column">
                     <section className="detail-card complexity-card">
                         <h2>⏱ Complexity Snapshot</h2>
-                        <div className="complexity-item">
+                        <div className="complexity-item" aria-label="Time Complexity">
                             <span className="complexity-label">Time:</span>
-                            <span className="complexity-val">{content.complexity?.time}</span>
+                            <span className="complexity-val">{content.complexity?.time || '—'}</span>
                         </div>
-                        <div className="complexity-item">
+                        <div className="complexity-item" aria-label="Space Complexity">
                             <span className="complexity-label">Space:</span>
-                            <span className="complexity-val">{content.complexity?.space}</span>
+                            <span className="complexity-val">{content.complexity?.space || '—'}</span>
                         </div>
                     </section>
 
