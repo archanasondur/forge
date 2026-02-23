@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 function JobModal({ isOpen, onClose, onSaveJob, jobToEdit }) {
   // Simple state for form data
@@ -77,14 +78,22 @@ function JobModal({ isOpen, onClose, onSaveJob, jobToEdit }) {
     onClose();
   };
 
-  // If modal is not open, don't render anything
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const isEditing = !!jobToEdit;
 
-  return (
-    <div className="modal-overlay">
-      <div className="modal">
+  return createPortal(
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>{isEditing ? 'Edit Job' : 'Add New Job'}</h3>
           <button className="close-button" onClick={onClose}>×</button>
@@ -197,7 +206,8 @@ function JobModal({ isOpen, onClose, onSaveJob, jobToEdit }) {
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
