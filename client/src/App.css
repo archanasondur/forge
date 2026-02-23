@@ -185,56 +185,6 @@ main {
 
 
 
-/* Contact Us Container */
-.contact-us-container {
-  width: 100%;
-  min-height: calc(100vh - 80px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-  color: #f4f4f5;
-  text-align: center;
-  padding: 100px 40px 40px 40px;
-  box-sizing: border-box;
-  position: relative;
-  animation: fadeIn 0.6s ease;
-}
-
-.contact-us-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-.contact-us-container h2 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-size: 3rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #a78bfa, #ec4899);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  position: relative;
-  z-index: 1;
-}
-
-.contact-us-container p {
-  font-size: 1.1rem;
-  color: #d1d5db;
-  max-width: 600px;
-  line-height: 1.6;
-  position: relative;
-  z-index: 1;
-}
 
 /* Premium Buttons */
 .start-button {
@@ -285,8 +235,7 @@ main {
 /* Responsive Design */
 @media (max-width: 768px) {
 
-  .home-container,
-  .contact-us-container {
+  .home-container {
     padding: 100px 20px 20px 20px;
   }
 
@@ -298,7 +247,4 @@ main {
     font-size: 1.1rem;
   }
 
-  .contact-us-container h2 {
-    font-size: 2.2rem;
-  }
 }
